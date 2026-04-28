@@ -1,4 +1,97 @@
 import './style.css';
+import Sortable from 'sortablejs';
+
+// ==========================================
+// Custom UI Utils (Toasts & Modals)
+// ==========================================
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
+}
+
+function showModal(title, message, isPrompt = false, defaultValue = '') {
+    return new Promise((resolve) => {
+        const overlay = document.getElementById('custom-modal-overlay');
+        const titleEl = document.getElementById('modal-title');
+        const msgEl = document.getElementById('modal-message');
+        const inputEl = document.getElementById('modal-input');
+        const btnCancel = document.getElementById('modal-cancel');
+        const btnConfirm = document.getElementById('modal-confirm');
+
+        titleEl.innerText = title;
+        msgEl.innerText = message;
+        
+        if (isPrompt) {
+            inputEl.style.display = 'block';
+            inputEl.value = defaultValue;
+            inputEl.focus();
+        } else {
+            inputEl.style.display = 'none';
+        }
+
+        overlay.style.display = 'flex';
+
+        const cleanup = () => {
+            overlay.style.display = 'none';
+            btnCancel.onclick = null;
+            btnConfirm.onclick = null;
+        };
+
+        btnCancel.onclick = () => {
+            cleanup();
+            resolve(isPrompt ? null : false);
+        };
+
+        btnConfirm.onclick = () => {
+            cleanup();
+            resolve(isPrompt ? inputEl.value : true);
+        };
+    });
+}
+
+// ==========================================
+// Anniversary Petals Logic
+// ==========================================
+function checkAnniversary() {
+    const today = new Date();
+    if (today.getMonth() === startDate.getMonth() && today.getDate() === startDate.getDate()) {
+        startPetals();
+    }
+}
+
+function startPetals() {
+    const container = document.getElementById('petals-container');
+    if (!container) return;
+    
+    setInterval(() => {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        
+        const size = Math.random() * 15 + 10;
+        petal.style.width = size + 'px';
+        petal.style.height = size + 'px';
+        
+        petal.style.left = Math.random() * 100 + 'vw';
+        
+        petal.style.setProperty('--end-x', (Math.random() * 200 - 100) + 'px');
+        petal.style.setProperty('--end-rotation', (Math.random() * 720) + 'deg');
+        
+        petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        
+        container.appendChild(petal);
+        
+        setTimeout(() => {
+            petal.remove();
+        }, 8000);
+    }, 300);
+}
 
 // ==========================================
 // 在这里修改你们的恋爱起始日期 (格式: YYYY-MM-DDTHH:mm:ss)
@@ -242,6 +335,7 @@ async function loadDataFromCOS() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    checkAnniversary();
     loadDataFromCOS();
 
     // 默认移除所有可编辑属性，确保仅浏览模式安全
@@ -285,7 +379,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }).catch(err => {
                 console.error(err);
                 item.remove();
-                alert("网络错误，文件上传失败");
+                showToast("网络错误，文件上传失败");
             });
 
             this.value = '';
@@ -340,6 +434,17 @@ function skipAuth() {
 function enableEditMode() {
     document.body.classList.add('edit-mode');
     makeEditable(document);
+    
+    // 激活画廊拖拽
+    const gallery = document.querySelector('.gallery-grid');
+    if (gallery && !gallery.sortableInstance) {
+        gallery.sortableInstance = new Sortable(gallery, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            delay: 200, // 移动端长按才触发拖拽，防止误触
+            delayOnTouchOnly: true
+        });
+    }
 }
 
 function makeEditable(element) {
@@ -358,9 +463,9 @@ function makeEditable(element) {
         const delBtn = document.createElement('button');
         delBtn.className = 'delete-btn';
         delBtn.innerHTML = '&times;';
-        delBtn.onclick = function (e) {
+        delBtn.onclick = async function (e) {
             e.stopPropagation();
-            if (confirm('确定要删除这个故事吗？')) {
+            if (await showModal('删除故事', '确定要删除这个故事吗？')) {
                 item.remove();
             }
         };
@@ -381,7 +486,7 @@ function makeEditable(element) {
         delBtn.innerHTML = '&times;';
         delBtn.onclick = async function (e) {
             e.stopPropagation();
-            if (confirm('确定要删除这个影像吗？')) {
+            if (await showModal('删除影像', '确定要删除这个影像吗？')) {
                 const mediaObj = item.querySelector('img, video');
                 const mediaSrc = mediaObj ? mediaObj.src : '';
                 item.remove(); // 立即在界面删除
@@ -410,11 +515,11 @@ function makeEditable(element) {
         const editBtn = document.createElement('button');
         editBtn.className = 'edit-btn';
         editBtn.innerHTML = '✎';
-        editBtn.onclick = function (e) {
+        editBtn.onclick = async function (e) {
             e.stopPropagation();
             const media = item.querySelector('img, video');
             if (media) {
-                const newUrl = prompt('请输入新的影像链接 (URL)\n(如需本地文件，请删除此项后使用“添加本地照片/视频”按钮):', media.src);
+                const newUrl = await showModal('编辑影像', '请输入新的影像链接 (URL)\n(如需本地文件，请删除此项后重新添加)', true, media.src);
                 if (newUrl) media.src = newUrl;
             }
         };
@@ -441,9 +546,9 @@ function makeEditable(element) {
         const delBtn = document.createElement('button');
         delBtn.className = 'delete-btn';
         delBtn.innerHTML = '&times;';
-        delBtn.onclick = function (e) {
+        delBtn.onclick = async function (e) {
             e.stopPropagation();
-            if (confirm('确定要删除这个心愿吗？')) {
+            if (await showModal('删除心愿', '确定要删除这个心愿吗？')) {
                 item.remove();
             }
         };
@@ -512,13 +617,13 @@ async function saveEdits() {
         body: contentJSON
     }).then(res => {
         if (res.ok) {
-            alert('修改已成功保存到云端！');
+            showToast('修改已成功保存到云端！');
         } else {
-            alert('网络错误，保存失败');
+            showToast('网络错误，保存失败');
         }
     }).catch(err => {
         console.error(err);
-        alert('网络错误，保存失败');
+        showToast('网络错误，保存失败');
     }).finally(() => {
         // 恢复 contenteditable
         enableEditMode();
