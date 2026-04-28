@@ -215,7 +215,7 @@ const r2PublicUrl = import.meta.env.VITE_R2_PUBLIC_URL || '';
 
 async function loadDataFromCOS() {
     try {
-        const url = `${r2PublicUrl}/data.json?t=${Date.now()}`;
+        const url = `/api/data?t=${Date.now()}`;
         const response = await fetch(url);
         if (!response.ok) {
             console.log("尚无云端数据文件，或加载失败");
