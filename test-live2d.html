@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Live2D</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
+    <script type="module">
+        import * as PIXI from 'pixi.js';
+        window.PIXI = PIXI;
+        import { Live2DModel } from 'pixi-live2d-display';
+
+        (async function() {
+            const app = new PIXI.Application({
+                view: document.getElementById('canvas'),
+                autoStart: true
+            });
+            try {
+                const model = await Live2DModel.from('/models/bongo-cat/cat.model3.json');
+                app.stage.addChild(model);
+                model.scale.set(0.2);
+                console.log("Bongo Cat SUCCESS!");
+                document.body.innerHTML += "<h1>SUCCESS!</h1>";
+            } catch (e) {
+                console.error("Bongo Cat FAILED:", e);
+                document.body.innerHTML += "<h1>FAILED: " + e.message + "</h1>";
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,753 @@
+:root {
+    --bg: #FCFAF8;
+    --accent-pink: #E8C6C6;
+    --accent-green: #C4D3C6;
+    --text-main: #333333;
+    --text-light: #888888;
+    --card-bg: #FFFFFF;
+    --font-serif: 'Georgia', serif;
+    --font-sans: 'Helvetica Neue', Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg);
+    font-family: var(--font-sans);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[contenteditable="true"],
+input {
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+nav {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active-nav {
+    color: var(--accent-pink);
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    gap: 20px;
+    padding: 20px 40px 40px 40px;
+    flex-grow: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    height: calc(100vh - 60px);
+    min-height: 700px;
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    will-change: transform;
+}
+
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    z-index: 10;
+}
+
+/* Section 1: Hero & Timer */
+.hero-card {
+    grid-column: 1 / 8;
+    grid-row: 1 / 6;
+    justify-content: center;
+    background: linear-gradient(135deg, #fff 0%, #fef8f8 100%);
+    position: relative;
+}
+
+.hero-card h1 {
+    font-family: var(--font-serif);
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: var(--text-main);
+    font-weight: bold;
+    letter-spacing: normal;
+}
+
+#timer {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-light);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.timer-number {
+    color: var(--accent-pink);
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0 2px;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    display: block;
+    font-weight: normal;
+}
+
+/* Section 2: Timeline */
+.timeline-card {
+    grid-column: 1 / 6;
+    grid-row: 6 / 13;
+    overflow-y: auto;
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 25px;
+    border-left: 1px solid var(--accent-pink);
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -4.5px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-pink);
+    border-radius: 50%;
+    border: none;
+}
+
+.timeline-date {
+    font-size: 12px;
+    color: var(--accent-pink);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.timeline-title {
+    font-size: 16px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.timeline-content p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Section 3: Gallery */
+.gallery-card {
+    grid-column: 8 / 13;
+    grid-row: 1 / 7;
+    overflow-y: auto;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    align-content: start;
+    flex-grow: 1;
+}
+
+.gallery-item {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.gallery-item img,
+.gallery-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.gallery-item:hover img,
+.gallery-item:hover video {
+    transform: scale(1.08);
+}
+
+/* Section 4: Bucket List */
+.bucket-card {
+    grid-column: 6 / 13;
+    grid-row: 7 / 13;
+    overflow-y: auto;
+}
+
+.bucket-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.bucket-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.bucket-item:last-child {
+    border-bottom: none;
+}
+
+.bucket-item.completed .task {
+    text-decoration: line-through;
+    color: var(--text-light);
+    opacity: 0.7;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--accent-green);
+    border-radius: 4px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.completed .checkbox {
+    background: var(--accent-green);
+}
+
+.completed .checkbox::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+}
+
+.task {
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+/* Single View Mode Styles */
+body.view-single .container {
+    display: flex;
+    height: auto;
+    min-height: calc(100vh - 60px);
+}
+
+body.view-single .card {
+    display: none;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    min-height: calc(100vh - 100px);
+}
+
+body.view-single .card.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+}
+
+body.view-single .section-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body.view-single .timeline-card {
+    align-items: center;
+}
+
+body.view-single .timeline {
+    width: 100%;
+    max-width: 800px;
+}
+
+body.view-single .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-rows: auto;
+}
+
+body.view-single .bucket-card {
+    align-items: center;
+}
+
+body.view-single .bucket-list {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Responsive */
+@media screen and (max-width: 900px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Auth Overlay & Edit Mode */
+#auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(252, 250, 248, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.auth-box h2 {
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.auth-box p {
+    margin-bottom: 25px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--accent-pink);
+    font-weight: bold;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.auth-input:focus {
+    border-color: var(--accent-pink);
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: var(--accent-pink);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #d9b5b5;
+}
+
+.btn-secondary {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.btn-secondary:hover {
+    background: #e8e8e8;
+}
+
+#save-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent-green);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+    display: none;
+    font-weight: bold;
+}
+
+#save-btn:hover {
+    background: #b3c2b5;
+}
+
+body.edit-mode #save-btn {
+    display: block;
+}
+
+body.edit-mode [contenteditable="true"] {
+    transition: all 0.3s;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+body.edit-mode [contenteditable="true"]:hover,
+body.edit-mode [contenteditable="true"]:focus {
+    outline: 1px dashed var(--accent-pink);
+    background: rgba(232, 198, 198, 0.1);
+}
+
+body.edit-mode .gallery-item img {
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+body.edit-mode .gallery-item img:hover {
+    opacity: 0.8;
+}
+
+body.edit-mode .checkbox {
+    cursor: pointer;
+}
+
+.add-btn {
+    display: none;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px dashed var(--accent-pink);
+    color: var(--accent-pink);
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    text-align: center;
+    width: fit-content;
+}
+
+.add-btn:hover {
+    background: rgba(232, 198, 198, 0.1);
+}
+
+body.edit-mode .add-btn {
+    display: block;
+}
+
+body.edit-mode .gallery-item {
+    position: relative;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 107, 107, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.delete-btn:hover {
+    background: red;
+}
+
+.edit-btn {
+    position: absolute;
+    top: 8px;
+    right: 44px;
+    background: rgba(107, 181, 255, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit-btn:hover {
+    background: #4a90e2;
+}
+
+body.edit-mode .gallery-item:hover .delete-btn,
+body.edit-mode .gallery-item:hover .edit-btn {
+    display: flex;
+}
+
+/* Dynamic Mouse Glow */
+.mouse-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(232, 198, 198, 0.35) 0%, rgba(255, 255, 255, 0) 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+/* 默认猫爪光标 (浅粉白) */
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="5.5" cy="9.5" r="2.5" fill="%23E8C6C6" stroke="%23FFF" stroke-width="1.5"/><circle cx="10" cy="5.5" r="2.5" fill="%23E8C6C6" stroke="%23FFF" stroke-width="1.5"/><circle cx="15" cy="5.5" r="2.5" fill="%23E8C6C6" stroke="%23FFF" stroke-width="1.5"/><circle cx="19.5" cy="9.5" r="2.5" fill="%23E8C6C6" stroke="%23FFF" stroke-width="1.5"/><path d="M12.5 21.5c-4.5 0-8-3.5-8-7 0-3 2.5-4.5 4.5-4.5 1 0 2 .5 3.5.5s2.5-.5 3.5-.5c2 0 4.5 1.5 4.5 4.5 0 3.5-3.5 7-8 7z" fill="%23E8C6C6" stroke="%23FFF" stroke-width="1.5"/></svg>') 14 14, auto;
+}
+
+/* 悬浮点击时的猫爪光标 (稍微深一点的粉色) */
+a,
+button,
+.btn,
+.add-btn,
+.delete-btn,
+.checkbox,
+[onclick],
+.gallery-item img,
+nav ul li a {
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="5.5" cy="9.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><circle cx="10" cy="5.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><circle cx="15" cy="5.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><circle cx="19.5" cy="9.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><path d="M12.5 21.5c-4.5 0-8-3.5-8-7 0-3 2.5-4.5 4.5-4.5 1 0 2 .5 3.5.5s2.5-.5 3.5-.5c2 0 4.5 1.5 4.5 4.5 0 3.5-3.5 7-8 7z" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/></svg>') 14 14, pointer !important;
+}
+
+/* 鼠标按下时的猫爪光标 (缩小+颜色加深，模拟按压动作) */
+body:active,
+a:active,
+button:active,
+.btn:active,
+.add-btn:active,
+.delete-btn:active,
+.checkbox:active,
+[onclick]:active,
+.gallery-item img:active,
+nav ul li a:active {
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g transform="scale(0.85) translate(2, 2)"><circle cx="5.5" cy="9.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><circle cx="10" cy="5.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><circle cx="15" cy="5.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><circle cx="19.5" cy="9.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><path d="M12.5 21.5c-4.5 0-8-3.5-8-7 0-3 2.5-4.5 4.5-4.5 1 0 2 .5 3.5.5s2.5-.5 3.5-.5c2 0 4.5 1.5 4.5 4.5 0 3.5-3.5 7-8 7z" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/></g></svg>') 14 14, pointer !important;
+}
+
+/* 点击飘落爱心特效 */
+.click-heart {
+    position: fixed;
+    pointer-events: none;
+    color: var(--accent-pink);
+    font-size: 16px;
+    animation: floatUp 0.8s ease-out forwards;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(-50%, -100%) scale(1.2);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-50%, -150%) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Lightbox Styles */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lightbox.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox img,
+.lightbox video {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.lightbox.active img,
+.lightbox.active video {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 10001;
+    user-select: none;
+}
+
+.lightbox-close:hover {
+    color: var(--accent-pink);
+}
+
+/* Virtual Pet styling removed, handled by Live2D canvas */
+
+/* Cat Paw Cursor for Bongo Cat */
+#live2d-hitbox {
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="5.5" cy="9.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><circle cx="10" cy="5.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><circle cx="15" cy="5.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><circle cx="19.5" cy="9.5" r="2.5" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/><path d="M12.5 21.5c-4.5 0-8-3.5-8-7 0-3 2.5-4.5 4.5-4.5 1 0 2 .5 3.5.5s2.5-.5 3.5-.5c2 0 4.5 1.5 4.5 4.5 0 3.5-3.5 7-8 7z" fill="%23FF8DA1" stroke="%23FFF" stroke-width="1.5"/></svg>') 14 14, pointer !important;
+}
+
+#live2d-hitbox.grabbing {
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g transform="scale(0.85) translate(2, 2)"><circle cx="5.5" cy="9.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><circle cx="10" cy="5.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><circle cx="15" cy="5.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><circle cx="19.5" cy="9.5" r="2.5" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/><path d="M12.5 21.5c-4.5 0-8-3.5-8-7 0-3 2.5-4.5 4.5-4.5 1 0 2 .5 3.5.5s2.5-.5 3.5-.5c2 0 4.5 1.5 4.5 4.5 0 3.5-3.5 7-8 7z" fill="%23FF6B8B" stroke="%23FFF" stroke-width="1.5"/></g></svg>') 14 14, grabbing !important;
+}
+
+/* Floating Heart Animation for Petting Interaction */
+.floating-heart {
+    position: fixed;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 10000;
+    animation: floatUp 1s ease-out forwards;
+    user-select: none;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-50px) scale(1.5);
+        opacity: 0;
+    }
+}
