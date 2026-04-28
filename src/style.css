@@ -249,6 +249,7 @@ nav ul li a.active-nav {
 }
 
 .bucket-item {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 10px 0;
@@ -583,7 +584,9 @@ body.edit-mode .gallery-item {
 }
 
 body.edit-mode .gallery-item:hover .delete-btn,
-body.edit-mode .gallery-item:hover .edit-btn {
+body.edit-mode .gallery-item:hover .edit-btn,
+body.edit-mode .timeline-item:hover .delete-btn,
+body.edit-mode .bucket-item:hover .delete-btn {
     display: flex;
 }
 

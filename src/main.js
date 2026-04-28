@@ -349,6 +349,24 @@ function makeEditable(element) {
         element.querySelectorAll(sel).forEach(el => el.setAttribute('contenteditable', 'true'));
     });
 
+    // 开启故事点击删除功能
+    const timelineItems = element.classList && element.classList.contains('timeline-item') ? [element] : element.querySelectorAll('.timeline-item');
+    timelineItems.forEach(item => {
+        const oldDelBtn = item.querySelector('.delete-btn');
+        if (oldDelBtn) oldDelBtn.remove();
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.innerHTML = '&times;';
+        delBtn.onclick = function (e) {
+            e.stopPropagation();
+            if (confirm('确定要删除这个故事吗？')) {
+                item.remove();
+            }
+        };
+        item.appendChild(delBtn);
+    });
+
     // 开启图片点击替换及删除功能
     const galleryItems = element.classList && element.classList.contains('gallery-item') ? [element] : element.querySelectorAll('.gallery-item');
     galleryItems.forEach(item => {
@@ -403,7 +421,7 @@ function makeEditable(element) {
         item.appendChild(editBtn);
     });
 
-    // 开启心愿单点击切换状态
+    // 开启心愿单点击切换状态及删除
     const items = element.classList && element.classList.contains('bucket-item') ? [element] : element.querySelectorAll('.bucket-item');
     items.forEach(item => {
         const checkbox = item.querySelector('.checkbox');
@@ -415,6 +433,21 @@ function makeEditable(element) {
                 item.classList.toggle('completed');
             });
         }
+        
+        // 添加心愿单删除按钮
+        const oldDelBtn = item.querySelector('.delete-btn');
+        if (oldDelBtn) oldDelBtn.remove();
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.innerHTML = '&times;';
+        delBtn.onclick = function (e) {
+            e.stopPropagation();
+            if (confirm('确定要删除这个心愿吗？')) {
+                item.remove();
+            }
+        };
+        item.appendChild(delBtn);
     });
 }
 
