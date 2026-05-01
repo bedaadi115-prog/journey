@@ -148,12 +148,10 @@ function updateTimer() {
     let years = date2.getFullYear() - date1.getFullYear();
 
     // 检查是否还没到今年的纪念日
-    const isBeforeAnniversary =
-        date2.getMonth() < date1.getMonth() ||
-        (date2.getMonth() === date1.getMonth() && date2.getDate() < date1.getDate()) ||
-        (date2.getMonth() === date1.getMonth() && date2.getDate() === date1.getDate() && date2.getTime() % 86400000 < date1.getTime() % 86400000);
+    const currentYearAnniversary = new Date(startDate);
+    currentYearAnniversary.setFullYear(date2.getFullYear());
 
-    if (isBeforeAnniversary) {
+    if (date2 < currentYearAnniversary) {
         years--;
     }
 
